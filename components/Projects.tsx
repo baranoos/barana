@@ -47,7 +47,8 @@ const projects = [
     title: "AI Robot Planner",
     description: "AI-gedreven planningstool met voorspellende algoritmes en real-time updates voor optimale productiviteit.",
     seed: "airobotplanner",
-    url: "#"
+    url: "https://ai-robot-planner-2x2e.vercel.app/",
+    image: "/RoboSketch.png"
   }
 ];
 
