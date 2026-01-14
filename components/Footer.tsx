@@ -122,7 +122,7 @@ export default function Footer() {
               fontWeight: 400 
             }}
           >
-            © 2025 Baran Atmaca. All rights reserved.
+            © 2026 Baran Atmaca. All rights reserved.
           </p>
         </div>
       </div>
