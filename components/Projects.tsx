@@ -117,7 +117,6 @@ export default function Projects() {
                 height={400}
                 loading="eager"
                 decoding="async"
-                onLoad={() => handleImageLoad(index)}
                 className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:brightness-50"
               />
               {/* Default overlay - shows truncated text */}
