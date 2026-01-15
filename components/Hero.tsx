@@ -1,13 +1,32 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import DiscordProfile from "./DiscordProfile";
 
 export default function Hero() {
   const [copied, setCopied] = useState(false);
+  const sectionRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="flex-1 lg:grid lg:grid-cols-[auto_460px] lg:grid-rows-[auto_1fr_auto] lg:gap-x-12 flex flex-col space-y-8 lg:space-y-0">
+    <div ref={sectionRef} className="flex-1 lg:grid lg:grid-cols-[auto_460px] lg:grid-rows-[auto_1fr_auto] lg:gap-x-12 flex flex-col space-y-8 lg:space-y-0">
       {/* Left column: Name + Email */}
       <div className="lg:col-start-1 lg:row-start-1 lg:row-end-4 flex flex-col justify-start lg:pt-20 lg:pl-8 pt-12 px-4 sm:px-6">
         <h1
@@ -16,12 +35,12 @@ export default function Hero() {
             letterSpacing: '-0.09em', 
             fontFamily: 'Inter, sans-serif', 
             fontWeight: 700,
-            animation: 'slideUpFade 0.8s ease-out 0.1s both'
+            animation: isVisible ? 'slideUpFade 1.2s ease-out 0.1s both' : 'none'
           }}
         >
           BARAN<br/>ATMACA
         </h1>
-        <div className="mt-8 lg:mt-32 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4" style={{ animation: 'slideUpFade 0.8s ease-out 0.3s both' }}>
+        <div className="mt-8 lg:mt-32 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4" style={{ animation: isVisible ? 'slideUpFade 1.2s ease-out 0.5s both' : 'none' }}>
           <a
             href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || '247822@student.scalda.nl'}`}
             className="text-[clamp(1rem,3vw,1.25rem)] sm:text-[clamp(1.1rem,3vw,1.4rem)] md:text-[clamp(1.2rem,3vw,1.6rem)] lg:text-[clamp(1.3rem,3vw,1.7rem)] text-black hover:opacity-60 transition-opacity duration-200 font-bold break-all"
@@ -60,12 +79,12 @@ export default function Hero() {
       </div>
 
       {/* Right column middle: Discord profile */}
-      <div className="lg:col-start-2 lg:row-start-2 lg:flex lg:justify-end lg:items-start lg:mt-20 lg:pr-8 flex justify-center px-4 sm:px-6" style={{ animation: 'slideUpFade 0.8s ease-out 0.5s both' }}>
+      <div className="lg:col-start-2 lg:row-start-2 lg:flex lg:justify-end lg:items-start lg:mt-20 lg:pr-8 flex justify-center px-4 sm:px-6" style={{ animation: isVisible ? 'slideUpFade 1.2s ease-out 0.7s both' : 'none' }}>
         <DiscordProfile />
       </div>
 
       {/* Right column bottom: description text */}
-      <div className="lg:col-start-2 lg:row-start-3 hidden lg:block" style={{ animation: 'slideUpFade 0.8s ease-out 0.7s both' }}>
+      <div className="lg:col-start-2 lg:row-start-3 hidden lg:block" style={{ animation: isVisible ? 'slideUpFade 1.2s ease-out 0.9s both' : 'none' }}>
       </div>
 
       <style jsx>{`
