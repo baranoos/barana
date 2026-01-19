@@ -7,7 +7,8 @@ import HamburgerMenu from './HamburgerMenu';
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [navLinksVisible, setNavLinksVisible] = useState(true);
+  const [navLinksVisible, setNavLinksVisible] = useState(false); // Start gesloten
+  const [hasAnimated, setHasAnimated] = useState(false);
   const rawPathname = usePathname();
   const pathname = rawPathname ?? ''; // default to empty string if null
 
@@ -18,6 +19,16 @@ export default function Navbar() {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Opening animatie bij pagina load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setNavLinksVisible(true);
+      setHasAnimated(true);
+    }, 1200); // Start na slideUpFade animatie
+
+    return () => clearTimeout(timer);
   }, []);
 
   const navItems = [
@@ -75,7 +86,7 @@ export default function Navbar() {
       {/* Desktop Navigation links */}
       <div className="hidden md:flex gap-4 lg:gap-8 items-center overflow-hidden">
         <div 
-          className={`flex gap-4 lg:gap-8 transition-all duration-300 ease-in-out ${
+          className={`flex gap-4 lg:gap-8 transition-all duration-700 ease-out ${
             navLinksVisible 
               ? 'translate-x-0 opacity-100' 
               : 'translate-x-full opacity-0'
@@ -103,23 +114,30 @@ export default function Navbar() {
         
         {/* Toggle Button */}
         <button
-          onClick={() => setNavLinksVisible(!navLinksVisible)}
+          onClick={() => {
+            if (hasAnimated) {
+              setNavLinksVisible(!navLinksVisible);
+            }
+          }}
           className="ml-2 hover:opacity-70 transition-opacity duration-200 focus:outline-none flex-shrink-0"
           aria-label="Toggle navigation"
         >
-          {navLinksVisible ? (
-            // Double lines (=)
-            <div className="relative w-8 h-6 flex flex-col justify-center">
-              <div className="absolute w-8 h-1 bg-black transform transition-all duration-300 origin-center top-1"></div>
-              <div className="absolute w-8 h-1 bg-black transform transition-all duration-300 origin-center bottom-1"></div>
-            </div>
-          ) : (
-            // X symbol
-            <div className="relative w-6 h-6">
-              <div className="absolute top-1/2 left-0 w-full h-1 bg-black transform -translate-y-1/2 rotate-45 transition-all duration-300"></div>
-              <div className="absolute top-1/2 left-0 w-full h-1 bg-black transform -translate-y-1/2 -rotate-45 transition-all duration-300"></div>
-            </div>
-          )}
+          <div className="relative w-8 h-6 flex items-center justify-center">
+            <div 
+              className={`absolute w-8 h-1 bg-black transition-all duration-700 ease-in-out ${
+                navLinksVisible 
+                  ? 'rotate-0 translate-y-[-5px]' 
+                  : 'rotate-45 translate-y-0'
+              }`}
+            ></div>
+            <div 
+              className={`absolute w-8 h-1 bg-black transition-all duration-700 ease-in-out ${
+                navLinksVisible 
+                  ? 'rotate-0 translate-y-[5px]' 
+                  : '-rotate-45 translate-y-0'
+              }`}
+            ></div>
+          </div>
         </button>
       </div>
 
